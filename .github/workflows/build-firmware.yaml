@@ -1,0 +1,134 @@
+# Perform continuous integration tests on updates and pull requests
+name: Build Firmware
+
+concurrency:
+  group: build-firmware-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
+on:
+  workflow_run:
+    workflows: ["Build test"]
+    types: [completed]
+
+  # Возможность ручного запуска из интерфейса GitHub
+  workflow_dispatch:
+    inputs:
+      force_notify:
+        description: 'Force Telegram notification'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup cache
+        uses: actions/cache@v3
+        with:
+          path: ci_cache
+          key: ${{ runner.os }}-build-${{ hashFiles('scripts/ci-install.sh') }}
+
+      - name: Check if build script exists
+        id: check_script
+        shell: bash
+        run: |
+          if [ ! -f "./scripts/ci-build_creality.sh" ]; then
+            echo "missing_script=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "missing_script=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Notify missing script
+        if: steps.check_script.outputs.missing_script == 'true'
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          WORKFLOW: ${{ github.workflow }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          MESSAGE="Repository: ${REPO}%0ABranch: ${BRANCH}%0AWorkflow: ${WORKFLOW}%0AStatus: BUILD SCRIPT MISSING (./scripts/ci-build_creality.sh)%0ARun: ${RUN_URL}"
+          if [ -n "${TELEGRAM_TOPIC_ID:-}" ]; then
+            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+              -d chat_id="${TELEGRAM_CHAT_ID}" \
+              -d message_thread_id="${TELEGRAM_TOPIC_ID}" \
+              -d text="${MESSAGE}"
+          else
+            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+              -d chat_id="${TELEGRAM_CHAT_ID}" \
+              -d text="${MESSAGE}"
+          fi
+
+      - name: Prepare build environment
+        if: steps.check_script.outputs.missing_script == 'false'
+        run: ./scripts/ci-install.sh
+
+      - name: Build firmware
+        if: steps.check_script.outputs.missing_script == 'false'
+        shell: bash
+        run: |
+          chmod +x ./scripts/ci-build_creality.sh
+          ./scripts/ci-build_creality.sh
+
+      - name: Upload firmware
+        if: steps.check_script.outputs.missing_script == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware
+          path: output/
+
+      - name: Notify success
+        if: steps.check_script.outputs.missing_script == 'false' && success()
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          WORKFLOW: ${{ github.workflow }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          MESSAGE="Repository: ${REPO}%0ABranch: ${BRANCH}%0AWorkflow: ${WORKFLOW}%0AStatus: FIRMWARE BUILT%0ARun: ${RUN_URL}"
+          if [ -n "${TELEGRAM_TOPIC_ID:-}" ]; then
+            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+              -d chat_id="${TELEGRAM_CHAT_ID}" \
+              -d message_thread_id="${TELEGRAM_TOPIC_ID}" \
+              -d text="${MESSAGE}"
+          else
+            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+              -d chat_id="${TELEGRAM_CHAT_ID}" \
+              -d text="${MESSAGE}"
+          fi
+
+
+      - name: Notify failure
+        if: steps.check_script.outputs.missing_script == 'false' && failure()
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          WORKFLOW: ${{ github.workflow }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          MESSAGE="Repository: ${REPO}%0ABranch: ${BRANCH}%0AWorkflow: ${WORKFLOW}%0AStatus: FIRMWARE BUILD FAILED%0ARun: ${RUN_URL}"
+          if [ -n "${TELEGRAM_TOPIC_ID:-}" ]; then
+            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+              -d chat_id="${TELEGRAM_CHAT_ID}" \
+              -d message_thread_id="${TELEGRAM_TOPIC_ID}" \
+              -d text="${MESSAGE}"
+          else
+            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+              -d chat_id="${TELEGRAM_CHAT_ID}" \
+              -d text="${MESSAGE}"
+          fi

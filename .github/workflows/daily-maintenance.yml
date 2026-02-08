@@ -1,0 +1,28 @@
+name: Maintenance & Sync
+
+on:
+  # Запуск по расписанию (каждый день в 4:00 утра по UTC)
+  schedule:
+    - cron: '0 4 * * *'
+  
+  # Возможность ручного запуска из интерфейса GitHub
+  workflow_dispatch:
+    inputs:
+      force_notify:
+        description: 'Force Telegram notification'
+        required: false
+        type: boolean
+        default: false
+
+# Важно: даем права на запись для обновления веток и зеркал
+permissions:
+  contents: write
+
+jobs:
+  run-sync:
+    # Вызываем нашу универсальную библиотеку
+    uses: memfis99999/ci-lib/.github/workflows/universal-sync.yml@master
+    with:
+      # Если запустили вручную — форсируем уведомление, иначе — по конфигу
+      force_notify: ${{ github.event.inputs.force_notify == 'true' }}
+    secrets: inherit

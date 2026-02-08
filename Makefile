@@ -4,6 +4,9 @@
 #
 # This file may be distributed under the terms of the GNU GPLv3 license.
 
+# host file
+host-tool-src = tool/host_crc16.c
+
 # Output directory
 OUT=out/
 
@@ -37,12 +40,14 @@ CFLAGS += -flto=auto -fwhole-program -fno-use-linker-plugin -ggdb3
 
 OBJS_klipper.elf = $(patsubst %.c, $(OUT)src/%.o,$(src-y))
 OBJS_klipper.elf += $(OUT)compile_time_request.o
-CFLAGS_klipper.elf = $(CFLAGS) -Wl,--gc-sections
+# CFLAGS_klipper.elf = $(CFLAGS) -Wl,--gc-sections
+CFLAGS_klipper.elf = $(CFLAGS) -Wl,--gc-sections,-Map,$(OUT)klipper.map
 
 CPPFLAGS = -I$(OUT) -P -MD -MT $@
 
 # Default targets
 target-y := $(OUT)klipper.elf
+target-y += $(OUT)hostCrc16.elf
 
 all:
 
@@ -52,6 +57,55 @@ Q=
 else
 Q=@
 MAKEFLAGS += --no-print-directory
+endif
+
+##### Process board hardware and firmware version
+
+ifeq ($(CONFIG_BOARD_INFO_CONFIGURE),y)
+
+ifeq ($(CONFIG_MAIN_MCU_BOARD),y)
+board_type := mcu
+else ifeq ($(CONFIG_NOZZLE_MCU_BOARD),y)
+board_type := noz
+else ifeq ($(CONFIG_BED_MCU_BOARD),y)
+board_type := bed
+else ifeq ($(CONFIG_EXT_MCU_BOARD),y)
+board_type := ext
+endif
+
+ifneq ($(CONFIG_CREALITY_MCU_MENU),)
+mcu_menu := $(patsubst "%",%,$(CONFIG_CREALITY_MCU_MENU))
+else
+mcu_menu :=
+endif
+
+ifneq ($(CONFIG_CREALITY_MCU_TYPE),)
+mcu_type := $(patsubst "%",%,$(CONFIG_CREALITY_MCU_TYPE))
+else
+mcu_type :=
+endif
+
+board_hw_version := $(board_type)$(CONFIG_MCU_BOARD_ID)_$(CONFIG_MCU_BOARD_HW_VER)_$(mcu_menu)$(mcu_type)
+board_fw_version := $(board_type)$(CONFIG_MCU_BOARD_ID)_$(CONFIG_MCU_BOARD_FW_VER)_$(CONFIG_MCU_BOARD_FW_RESERVED)
+
+CFLAGS += -DBOARD_FW_VERSION=\"$(board_fw_version)\"
+
+export board_hw_version board_fw_version
+
+# Rename binary output file rules
+
+ifneq ($(board_hw_version)$(board_fw_version),)
+rename_bin := $(board_hw_version)-$(board_fw_version).bin
+target-y += $(OUT)$(rename_bin)
+
+$(OUT)$(rename_bin): $(OUT)klipper.bin $(OUT)hostCrc16.elf
+	@echo "  Adding CRC"
+	$(Q)$(OUT)hostCrc16.elf $<
+
+	@echo "  Renaming binary"
+	$(Q)cp -v $< $@
+endif
+
 endif
 
 # Include board specific makefile
@@ -72,6 +126,10 @@ $(OUT)klipper.elf: $(OBJS_klipper.elf)
 	@echo "  Linking $@"
 	$(Q)$(CC) $(OBJS_klipper.elf) $(CFLAGS_klipper.elf) -o $@
 	$(Q)scripts/check-gcc.sh $@ $(OUT)compile_time_request.o
+
+$(OUT)hostCrc16.elf: $(host-tool-src)
+	@echo "  Compiling and Linking $@"
+	$(Q)gcc $< -o $@
 
 ################ Compile time requests
 
@@ -115,6 +173,12 @@ $(KCONFIG_CONFIG) olddefconfig: src/Kconfig
 
 menuconfig:
 	$(Q)$(PYTHON) lib/kconfiglib/menuconfig.py src/Kconfig
+	@echo "  Board HW Ver: $(board_hw_version)"
+	@echo "  Board FW Ver: $(board_fw_version)"
+
+%_defconfig: src/configs/%_defconfig
+	@echo "  Load configuration: $@"
+	$(Q)cp -v src/configs/$@ $(KCONFIG_CONFIG)
 
 ################ Generic rules
 
