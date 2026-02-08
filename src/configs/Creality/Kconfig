@@ -1,0 +1,105 @@
+# Creality integration options
+
+menu "Creality options"
+    depends on MACH_STM32 || MACH_GD32
+
+choice
+    prompt "Creality machine type"
+    default MACH_CREALITY_OTHERS
+config MACH_CREALITY_OTHERS
+    bool "CREALITY others"
+config MACH_CREALITY_CR_10_SMART
+    bool "CREALITY CR-10 SMART"
+endchoice
+
+config BUILD_MACHINE_UID
+    string "Custom your machine firmware name as unique ID"
+    depends on LOW_LEVEL_OPTIONS
+    help
+        Used by host to distinguish printers.
+
+# --- Board info / Creality board update ---
+config BOARD_INFO_CONFIGURE
+    bool "Board info configure"
+    default n
+    help
+        Enable board info configure, we can update mcu firmware
+        by Linux with uart port.
+
+menu "Board Configure"
+    depends on BOARD_INFO_CONFIGURE
+
+choice
+    prompt "Board Type"
+    default MAIN_MCU_BOARD
+config MAIN_MCU_BOARD
+    bool "Main MCU"
+config NOZZLE_MCU_BOARD
+    bool "Nozzle MCU"
+config BED_MCU_BOARD
+    bool "Bed MCU"
+config EXT_MCU_BOARD
+    bool "Extended MCU"
+endchoice
+
+config MCU_BOARD_ID
+    int "MCU Board ID"
+    default 0
+
+config MCU_BOARD_HW_VER
+    int "HW Version"
+    default 0
+
+config MCU_BOARD_FW_VER
+    int "FW Version"
+    default 0
+
+config MCU_BOARD_FW_RESERVED
+    int "FW Reserved"
+    default 0
+
+endmenu # Board Configure
+
+config CREALITY_MCU_MENU
+    string
+    default "S" if MACH_STM32
+    default "G" if MACH_GD32
+
+config CREALITY_MCU_TYPE
+    string
+    default "00" if MACH_STM32F030
+    default "01" if MACH_STM32F031
+    default "02" if MACH_STM32F042
+    default "03" if MACH_STM32F070
+    default "04" if MACH_STM32F072
+    default "05" if MACH_STM32F0x2
+    default "10" if MACH_STM32F103
+    default "20" if MACH_STM32F207
+    default "40" if MACH_STM32F401
+    default "41" if MACH_STM32F405
+    default "42" if MACH_STM32F429
+    default "43" if MACH_STM32F446
+    default "44" if MACH_STM32F4x5
+    default "70" if MACH_STM32H723
+    default "71" if MACH_STM32H743
+    default "72" if MACH_STM32H750
+    default "06" if MACH_STM32G071
+    default "07" if MACH_STM32G0B1
+
+    default "30" if MACH_GD32F303XB
+    default "31" if MACH_GD32F303XC
+    default "32" if MACH_GD32F303XE
+    default "33" if MACH_GD32F303XG
+    default "34" if MACH_GD32F303XI
+    default "35" if MACH_GD32F303XK
+    default "36" if MACH_GD32F305XB
+    default "37" if MACH_GD32F305XC
+    default "38" if MACH_GD32F305XE
+    default "39" if MACH_GD32F305XG
+    default "3a" if MACH_GD32F307XC
+    default "3b" if MACH_GD32F307XE
+    default "3c" if MACH_GD32F307XG
+    default "20" if MACH_GD32E230X6
+    default "21" if MACH_GD32E230X8
+
+endmenu # Creality options

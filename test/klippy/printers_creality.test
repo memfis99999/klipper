@@ -1,0 +1,6 @@
+# Basic sanity checks on the example printer config files
+GCODE move.gcode
+
+# Test Creality K1
+DICTIONARY K1_mcu0_120_G32.dict nozzle_mcu=K1_noz0_120_G30.dict leveling_mcu=K1_bed0_110_G21.dict
+CONFIG ../../config/Creality/K1_CR4CU220812S12_Without_prTouch/printer.cfg
