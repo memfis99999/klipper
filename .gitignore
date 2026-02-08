@@ -6,5 +6,5 @@ out
 klippy/.version
 output
 fw
-.log
+*.log
 ci_build

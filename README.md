@@ -59,35 +59,26 @@ A full prTouch reimplementation is planned for the future, but the legacy versio
 
 ---
 
-## 📦 Installing this fork on a Creality K1 printer
+## 📦 Installing Klipper + matching firmware (no compilation)
 
-This fork is designed so that Klipper and MCU firmware can be updated together, without compiling anything on the printer.
 
+  This fork provides prebuilt MCU firmware for Creality K1 printers.
+Firmware is built automatically by GitHub Actions for every commit in the master branch.
+Each firmware package contains a text file with ready-to-run commands that install the exact Klipper version used during the build.
 Installation consists of two steps:
-
-Clone the fork on the printer.
-
-Add the firmware-binaries branch as a submodule.
-
-After that, updates are performed with a single command.
-
-### 1️⃣ Clone the fork on the printer
+1.  Clone Klipper
+2.  Run the helper script that downloads the matching firmware
 
 SSH into the printer and run:
 ```bash
-cd ~
-git clone --depth 1 --branch workbench https://github.com/memfis99999/klipper.git klipper
+git clone --branch master https://github.com/memfis99999/klipper.git klipper
 cd klipper
+./scripts/get-fw.sh
 ```
-### 2️⃣ Add firmware submodule
 
-The firmware-binaries branch contains prebuilt MCU firmware generated automatically by GitHub Actions.
+After this, the directory fw/K1/ will contain all MCU binaries corresponding to your current Klipper commit.
+This fork is designed so that Klipper and MCU firmware can be updated together, without compiling anything on the printer.
 
-Add it as a submodule:
-```bash
-git submodule add -b firmware-binaries https://github.com/memfis99999/klipper.git fw
-git submodule update --init --recursive
-```
 Directory structure becomes:
 ```tree
 klipper/
@@ -96,15 +87,16 @@ klipper/
   fw/        (prebuilt MCU binaries)
     K1/
       dict/  (prebuild dictionary)
-      bed0_100_G21-bed0_011_000.bin
-      bed0_110_G21-bed0_011_000.bin
-      mcu0_110_G32-mcu0_011_000.bin
-      mcu0_110_S40-mcu0_011_000.bin
-      mcu0_120_G32-mcu0_011_000.bin
-      noz0_110_S06-noz0_011_000.bin
-      noz0_110_G30-noz0_011_000.bin
-      noz0_120_G30-noz0_011_000.bin
+      bed0_100_G21-bed0_0xx_yyy.bin
+      bed0_110_G21-bed0_0xx_yyy.bin
+      mcu0_110_G32-mcu0_0xx_yyy.bin
+      mcu0_110_S40-mcu0_0xx_yyy.bin
+      mcu0_120_G32-mcu0_0xx_yyy.bin
+      noz0_110_S06-noz0_0xx_yyy.bin
+      noz0_110_G30-noz0_0xx_yyy.bin
+      noz0_120_G30-noz0_0xx_yyy.bin
       firmware.txt
+      build.log
   .gitmodules
 ```
 ### 🔄 Updating Klipper + MCU firmware (one command)
@@ -113,12 +105,13 @@ To update both Klipper and MCU firmware:
 ```bash
 cd ~/klipper
 git pull
-git submodule update --remote
+./scripts/get-fw.sh
+
 (reboot Creality 3D Printer)
 ```
-git pull updates Klipper (branch My_K1c).
+git pull updates Klipper (branch master).
 
-git submodule update --remote updates MCU firmware.
+
 
 Klipper restarts and loads the new binaries.
 
@@ -126,15 +119,13 @@ No compilation on the printer.
 
 ### 🤖 How firmware is delivered (GitHub Actions automation)
 
-The firmware-binaries branch is updated automatically:
+The firmware-binaries branch "fw-files" is updated automatically:
 
-Any commit in My_K1c triggers GitHub Actions.
+Any commit in master triggers GitHub Actions.
 
 Firmware is built in the cloud.
 
-Binaries are copied into firmware-binaries.
-
-The printer receives them via git submodule update --remote.
+Binaries are copied into "fw-files" branch.
 
 ###  Advantages:
 

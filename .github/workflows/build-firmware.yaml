@@ -19,12 +19,27 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: write
+
 jobs:
   build:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Fetch tags (required for git describe)
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --force --tags origin
+          git describe --tags --long --dirty --always || true
+          echo "Tags count: $(git tag | wc -l)"
 
       - name: Setup cache
         uses: actions/cache@v3
@@ -84,6 +99,24 @@ jobs:
           name: firmware
           path: output/
 
+      - name: Push firmware to fw-files branch
+        if: steps.check_script.outputs.missing_script == 'false'
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git ls-remote --exit-code origin fw-files || git branch fw-files
+          git fetch origin fw-files || true
+          git worktree add fw-worktree fw-files
+          rm -rf fw-worktree/fw/K1
+          mkdir -p fw-worktree/fw/K1
+          cp -r output/* fw-worktree/fw/K1/
+          cd fw-worktree
+          git add fw
+          git commit -m "FW for ${GITHUB_SHA}" || true
+          git push origin fw-files
+          cd ..
+          git worktree remove fw-worktree --force
+
       - name: Notify success
         if: steps.check_script.outputs.missing_script == 'false' && success()
         env:
@@ -107,7 +140,6 @@ jobs:
               -d chat_id="${TELEGRAM_CHAT_ID}" \
               -d text="${MESSAGE}"
           fi
-
 
       - name: Notify failure
         if: steps.check_script.outputs.missing_script == 'false' && failure()

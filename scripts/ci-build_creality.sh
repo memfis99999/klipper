@@ -17,11 +17,14 @@ FW_DESCRIPTION_FILE=${ARTIFACT_DIR}/firmware.txt
 
 CONFIGS_DIR=${PWD}/src/configs/Creality
 
+rm -rf "${OUT_DIR}" "${ARTIFACT_DIR}" "${DICTDIR}"
+
 mkdir -p "${OUT_DIR}" "${ARTIFACT_DIR}" "${DICTDIR}"
 
 # Get full version from Git
 GIT_DESCRIBE=$(git describe --tags --long --dirty --always)
 VERSION_FULL="${GIT_DESCRIBE}"
+echo "VERSION_FULL=${VERSION_FULL}"
 
 # Parse version information
 if [[ $VERSION_FULL =~ ^[vV]([0-9]+)\.([0-9]+)\.([0-9]+)-([0-9]+)-g([a-f0-9]+)(-dirty)? ]]; then
@@ -44,6 +47,13 @@ elif [[ $VERSION_FULL =~ ^[vV]([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)-([0-9]+)-g(
 else
   echo "ERROR: Failed to parse version: ${VERSION_FULL}" | tee -a "${LOG_FILE}"
   exit 1
+    MAJOR="0"
+    MINOR="0"
+    PATCH="0"
+    BUILD="0"
+    COMMITS="0"
+    GIT_HASH="0"
+    DIRTY=""
 fi
 
 # Get repository URL
@@ -92,10 +102,10 @@ for filepath in "${CONFIGS_DIR}"/*_defconfig; do
   unset CC
   cp ${filepath} .config
   make olddefconfig
-
+# CONFIG_MCU_BOARD_FW_RESERVED="$(printf "%03d" "${PATCH}")"
   make \
-    CONFIG_MCU_BOARD_FW_VER="$(printf "%03d" "${MAJOR}${MINOR}")" \
-    CONFIG_MCU_BOARD_FW_RESERVED="$(printf "%03d" "${PATCH}")" \
+    CONFIG_MCU_BOARD_FW_VER="$(printf "%01d%02d" "${MAJOR}" "${MINOR}")" \
+    CONFIG_MCU_BOARD_FW_RESERVED=$(printf "%03d" $((COMMITS % 1000))) \
     >> "${LOG_FILE}" 2>&1
   rc=$?
   set -e
@@ -105,8 +115,8 @@ for filepath in "${CONFIGS_DIR}"/*_defconfig; do
     echo "[${time_now}] ❌ Build failed for ${filename}. Re-run with V=1" | tee -a "${LOG_FILE}"
     make clean >> "${LOG_FILE}" 2>&1 || true
     make \
-      CONFIG_MCU_BOARD_FW_VER="$(printf "%03d" "${MAJOR}${MINOR}")" \
-      CONFIG_MCU_BOARD_FW_RESERVED="$(printf "%03d" "${PATCH}")" \
+      CONFIG_MCU_BOARD_FW_VER="$(printf "%01d%02d" "${MAJOR}" "${MINOR}")" \
+      CONFIG_MCU_BOARD_FW_RESERVED=$(printf "%03d" $((COMMITS % 1000))) \
       V=1 >> "${LOG_FILE}" 2>&1
     exit 1
   fi
@@ -141,7 +151,12 @@ time_now="$(date '+%Y-%m-%d %H:%M:%S')"
   echo "🛠️ Branch: ${GIT_BRANCH}"
   echo "🛠️ Toolchain: ${TOOLCHAIN_LINE}"
   echo "🛠️ Artifacts saved to: ${ARTIFACT_DIR}"
-  echo "🔗 URL: git clone --depth 1 --branch ${GIT_BRANCH} ${GITHUB_URL}.git klipper && cd klipper && git checkout ${GIT_HASH}"
+  echo "🔧 Commands to install matching Klipper and firmware:"
+  echo
+  echo "git clone --branch ${GIT_BRANCH} ${GITHUB_URL}.git klipper && \\"
+  echo "cd klipper && \\"
+  echo "git checkout ${GIT_HASH} && \\"
+  echo "./scripts/get-fw.sh"
 } > "${FW_DESCRIPTION_FILE}"
 
 echo "[${time_now}] 🛠️ Build completed successfully." | tee -a "${LOG_FILE}"
