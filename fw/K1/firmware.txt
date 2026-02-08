@@ -1,8 +1,13 @@
-[2026-02-08 08:32:28]
+[2026-02-08 17:20:53]
 🛠️ Build completed successfully.
-🛠️ Firmware version: v0.13.0-536-gf273d2c8
+🛠️ Firmware version: v0.13.0-536-gba865dfb
 🛠️ Repository: https://github.com/memfis99999/klipper
 🛠️ Branch: master
 🛠️ Toolchain: arm-none-eabi-gcc (15:10.3-2021.07-4) 10.3.1 20210621 (release)
 🛠️ Artifacts saved to: /home/runner/work/klipper/klipper/output
-🔗 URL: git clone --depth 1 --branch master https://github.com/memfis99999/klipper.git klipper && cd klipper && git checkout f273d2c8
+🔧 Commands to install matching Klipper and firmware:
+
+git clone --branch master https://github.com/memfis99999/klipper.git klipper && \
+cd klipper && \
+git checkout ba865dfb && \
+./scripts/get-fw.sh
