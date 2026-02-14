@@ -1,10 +1,10 @@
 ----------------------------------------
-[2026-02-08 17:20:19] 🛠️ Build firmware (Creality_K1)
-[2026-02-08 17:20:19] 🛠️ Version: v0.13.0-536-gba865dfb
-[2026-02-08 17:20:19] 🛠️ Repo: https://github.com/memfis99999/klipper
-[2026-02-08 17:20:19] 🛠️ Branch: master
-[2026-02-08 17:20:19] 🛠️ CONFIGS_DIR: /home/runner/work/klipper/klipper/src/configs/Creality
-[2026-02-08 17:20:19] Found config: K1_bed0_100_G21_defconfig
+[2026-02-14 20:56:10] 🛠️ Build firmware (Creality_K1)
+[2026-02-14 20:56:10] 🛠️ Version: v0.13.0-544-ge604706a
+[2026-02-14 20:56:10] 🛠️ Repo: https://github.com/memfis99999/klipper
+[2026-02-14 20:56:10] 🛠️ Branch: master
+[2026-02-14 20:56:10] 🛠️ CONFIGS_DIR: /home/runner/work/klipper/klipper/src/configs/Creality
+[2026-02-14 20:56:10] Found config: K1_bed0_100_G21_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -28,6 +28,7 @@
   Compiling out/src/thermocouple.o
   Compiling out/src/sensor_adxl345.o
   Compiling out/src/sensor_lis2dw.o
+  Compiling out/src/sensor_bmi160.o
   Compiling out/src/sensor_hx71x.o
   Compiling out/src/sensor_ads1220.o
   Compiling out/src/sensor_angle.o
@@ -47,17 +48,17 @@
   Compiling out/src/gd32/serial.o
   Compiling out/src/generic/serial_irq.o
   Building out/compile_time_request.o
-Version: v0.13.0-536-gba865dfb
+Version: v0.13.0-544-ge604706a
   Preprocessing out/src/generic/armcm_link.ld
   Linking out/klipper.elf
   Compiling and Linking out/hostCrc16.elf
   Creating bin file out/klipper.bin
   Adding CRC
-  CRC16 is 0x8305
-  Length is 0x8d4c
+  CRC16 is 0x7efa
+  Length is 0x9170
   Renaming binary
-'out/klipper.bin' -> 'out/bed0_100_G21-bed0_013_536.bin'
-[2026-02-08 17:20:23] Found config: K1_bed0_110_G21_defconfig
+'out/klipper.bin' -> 'out/bed0_100_G21-bed0_013_544.bin'
+[2026-02-14 20:56:14] Found config: K1_bed0_110_G21_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -81,6 +82,7 @@ Version: v0.13.0-536-gba865dfb
   Compiling out/src/thermocouple.o
   Compiling out/src/sensor_adxl345.o
   Compiling out/src/sensor_lis2dw.o
+  Compiling out/src/sensor_bmi160.o
   Compiling out/src/sensor_hx71x.o
   Compiling out/src/sensor_ads1220.o
   Compiling out/src/sensor_angle.o
@@ -100,17 +102,17 @@ Version: v0.13.0-536-gba865dfb
   Compiling out/src/gd32/serial.o
   Compiling out/src/generic/serial_irq.o
   Building out/compile_time_request.o
-Version: v0.13.0-536-gba865dfb
+Version: v0.13.0-544-ge604706a
   Preprocessing out/src/generic/armcm_link.ld
   Linking out/klipper.elf
   Compiling and Linking out/hostCrc16.elf
   Creating bin file out/klipper.bin
   Adding CRC
-  CRC16 is 0x1dbd
-  Length is 0x8d4c
+  CRC16 is 0x567a
+  Length is 0x9170
   Renaming binary
-'out/klipper.bin' -> 'out/bed0_110_G21-bed0_013_536.bin'
-[2026-02-08 17:20:27] Found config: K1_mcu0_110_G32_defconfig
+'out/klipper.bin' -> 'out/bed0_110_G21-bed0_013_544.bin'
+[2026-02-14 20:56:18] Found config: K1_mcu0_110_G32_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -134,6 +136,7 @@ Version: v0.13.0-536-gba865dfb
   Compiling out/src/thermocouple.o
   Compiling out/src/sensor_adxl345.o
   Compiling out/src/sensor_lis2dw.o
+  Compiling out/src/sensor_bmi160.o
   Compiling out/src/sensor_hx71x.o
   Compiling out/src/sensor_ads1220.o
   Compiling out/src/sensor_angle.o
@@ -153,17 +156,17 @@ Version: v0.13.0-536-gba865dfb
   Compiling out/src/gd32/serial.o
   Compiling out/src/generic/serial_irq.o
   Building out/compile_time_request.o
-Version: v0.13.0-536-gba865dfb
+Version: v0.13.0-544-ge604706a
   Preprocessing out/src/generic/armcm_link.ld
   Linking out/klipper.elf
   Compiling and Linking out/hostCrc16.elf
   Creating bin file out/klipper.bin
   Adding CRC
-  CRC16 is 0xa0ac
-  Length is 0x7c30
+  CRC16 is 0xf9cd
+  Length is 0x7f70
   Renaming binary
-'out/klipper.bin' -> 'out/mcu0_110_G32-mcu0_013_536.bin'
-[2026-02-08 17:20:31] Found config: K1_mcu0_110_S40_defconfig
+'out/klipper.bin' -> 'out/mcu0_110_G32-mcu0_013_544.bin'
+[2026-02-14 20:56:22] Found config: K1_mcu0_110_S40_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -191,6 +194,7 @@ Version: v0.13.0-536-gba865dfb
   Compiling out/src/thermocouple.o
   Compiling out/src/sensor_adxl345.o
   Compiling out/src/sensor_lis2dw.o
+  Compiling out/src/sensor_bmi160.o
   Compiling out/src/sensor_mpu9250.o
   Compiling out/src/sensor_icm20948.o
   Compiling out/src/sensor_hx71x.o
@@ -220,17 +224,17 @@ Version: v0.13.0-536-gba865dfb
   Compiling out/src/stm32/hard_pwm.o
   Compiling out/src/stm32/sdio.o
   Building out/compile_time_request.o
-Version: v0.13.0-536-gba865dfb
+Version: v0.13.0-544-ge604706a
   Preprocessing out/src/generic/armcm_link.ld
   Linking out/klipper.elf
   Compiling and Linking out/hostCrc16.elf
   Creating bin file out/klipper.bin
   Adding CRC
-  CRC16 is 0xca50
-  Length is 0x9b5c
+  CRC16 is 0x29ea
+  Length is 0x9f98
   Renaming binary
-'out/klipper.bin' -> 'out/mcu0_110_S40-mcu0_013_536.bin'
-[2026-02-08 17:20:36] Found config: K1_mcu0_120_G32_defconfig
+'out/klipper.bin' -> 'out/mcu0_110_S40-mcu0_013_544.bin'
+[2026-02-14 20:56:28] Found config: K1_mcu0_120_G32_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -254,6 +258,7 @@ Version: v0.13.0-536-gba865dfb
   Compiling out/src/thermocouple.o
   Compiling out/src/sensor_adxl345.o
   Compiling out/src/sensor_lis2dw.o
+  Compiling out/src/sensor_bmi160.o
   Compiling out/src/sensor_hx71x.o
   Compiling out/src/sensor_ads1220.o
   Compiling out/src/sensor_angle.o
@@ -273,17 +278,17 @@ Version: v0.13.0-536-gba865dfb
   Compiling out/src/gd32/serial.o
   Compiling out/src/generic/serial_irq.o
   Building out/compile_time_request.o
-Version: v0.13.0-536-gba865dfb
+Version: v0.13.0-544-ge604706a
   Preprocessing out/src/generic/armcm_link.ld
   Linking out/klipper.elf
   Compiling and Linking out/hostCrc16.elf
   Creating bin file out/klipper.bin
   Adding CRC
-  CRC16 is 0xdb6b
-  Length is 0x7c30
+  CRC16 is 0x6e84
+  Length is 0x7f70
   Renaming binary
-'out/klipper.bin' -> 'out/mcu0_120_G32-mcu0_013_536.bin'
-[2026-02-08 17:20:40] Found config: K1_noz0_110_G30_defconfig
+'out/klipper.bin' -> 'out/mcu0_120_G32-mcu0_013_544.bin'
+[2026-02-14 20:56:32] Found config: K1_noz0_110_G30_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -307,6 +312,7 @@ Version: v0.13.0-536-gba865dfb
   Compiling out/src/thermocouple.o
   Compiling out/src/sensor_adxl345.o
   Compiling out/src/sensor_lis2dw.o
+  Compiling out/src/sensor_bmi160.o
   Compiling out/src/sensor_hx71x.o
   Compiling out/src/sensor_ads1220.o
   Compiling out/src/sensor_angle.o
@@ -326,17 +332,17 @@ Version: v0.13.0-536-gba865dfb
   Compiling out/src/gd32/serial.o
   Compiling out/src/generic/serial_irq.o
   Building out/compile_time_request.o
-Version: v0.13.0-536-gba865dfb
+Version: v0.13.0-544-ge604706a
   Preprocessing out/src/generic/armcm_link.ld
   Linking out/klipper.elf
   Compiling and Linking out/hostCrc16.elf
   Creating bin file out/klipper.bin
   Adding CRC
-  CRC16 is 0xbb17
-  Length is 0x7c30
+  CRC16 is 0x4da4
+  Length is 0x7f80
   Renaming binary
-'out/klipper.bin' -> 'out/noz0_110_G30-noz0_013_536.bin'
-[2026-02-08 17:20:44] Found config: K1_noz0_110_S06_defconfig
+'out/klipper.bin' -> 'out/noz0_110_G30-noz0_013_544.bin'
+[2026-02-14 20:56:36] Found config: K1_noz0_110_S06_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -363,6 +369,7 @@ Version: v0.13.0-536-gba865dfb
   Compiling out/src/thermocouple.o
   Compiling out/src/sensor_adxl345.o
   Compiling out/src/sensor_lis2dw.o
+  Compiling out/src/sensor_bmi160.o
   Compiling out/src/sensor_mpu9250.o
   Compiling out/src/sensor_icm20948.o
   Compiling out/src/sensor_hx71x.o
@@ -391,17 +398,17 @@ Version: v0.13.0-536-gba865dfb
   Compiling out/src/generic/serial_irq.o
   Compiling out/src/stm32/hard_pwm.o
   Building out/compile_time_request.o
-Version: v0.13.0-536-gba865dfb
+Version: v0.13.0-544-ge604706a
   Preprocessing out/src/generic/armcm_link.ld
   Linking out/klipper.elf
   Compiling and Linking out/hostCrc16.elf
   Creating bin file out/klipper.bin
   Adding CRC
-  CRC16 is 0xe6f3
-  Length is 0x9c90
+  CRC16 is 0xd871
+  Length is 0xa058
   Renaming binary
-'out/klipper.bin' -> 'out/noz0_110_S06-noz0_013_536.bin'
-[2026-02-08 17:20:49] Found config: K1_noz0_120_G30_defconfig
+'out/klipper.bin' -> 'out/noz0_110_S06-noz0_013_544.bin'
+[2026-02-14 20:56:41] Found config: K1_noz0_120_G30_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -425,6 +432,7 @@ Version: v0.13.0-536-gba865dfb
   Compiling out/src/thermocouple.o
   Compiling out/src/sensor_adxl345.o
   Compiling out/src/sensor_lis2dw.o
+  Compiling out/src/sensor_bmi160.o
   Compiling out/src/sensor_hx71x.o
   Compiling out/src/sensor_ads1220.o
   Compiling out/src/sensor_angle.o
@@ -444,16 +452,16 @@ Version: v0.13.0-536-gba865dfb
   Compiling out/src/gd32/serial.o
   Compiling out/src/generic/serial_irq.o
   Building out/compile_time_request.o
-Version: v0.13.0-536-gba865dfb
+Version: v0.13.0-544-ge604706a
   Preprocessing out/src/generic/armcm_link.ld
   Linking out/klipper.elf
   Compiling and Linking out/hostCrc16.elf
   Creating bin file out/klipper.bin
   Adding CRC
-  CRC16 is 0xeea8
-  Length is 0x7c30
+  CRC16 is 0xfa3a
+  Length is 0x7f80
   Renaming binary
-'out/klipper.bin' -> 'out/noz0_120_G30-noz0_013_536.bin'
-[2026-02-08 17:20:53] 🛠️ Build completed successfully.
-Build took 34 seconds.
+'out/klipper.bin' -> 'out/noz0_120_G30-noz0_013_544.bin'
+[2026-02-14 20:56:45] 🛠️ Build completed successfully.
+Build took 35 seconds.
 ----------------------------------------
