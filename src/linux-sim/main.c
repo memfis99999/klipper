@@ -13,6 +13,7 @@
 #include "command.h" // DECL_CONSTANT
 #include "internal.h" // console_setup
 #include "sched.h" // sched_main
+#include "debug.h"
 
 DECL_CONSTANT_STR("MCU", "linux");
 
@@ -102,7 +103,9 @@ main(int argc, char **argv)
             return ret;
     }
 
+    debug_log_open("/tmp/debug_gpio.log");
     // Main loop
     sched_main();
+    debug_log_close();
     return 0;
 }

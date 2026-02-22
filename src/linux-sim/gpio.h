@@ -1,7 +1,59 @@
-#ifndef __LINUX_GPIO_H
-#define __LINUX_GPIO_H
+#ifndef __LINUX_SIM_GPIO_H
+#define __LINUX_SIM_GPIO_H
 
 #include <stdint.h> // uint8_t
+#include "internal.h" // MAX_GPIO_LINES
+
+enum pin_mode {
+    PM_NONE = 0,
+    PM_BIN_IN = 1,
+    PM_BIN_OUT = 2,
+    PM_ANALOG_IN = 3,
+    PM_PWM_OUT = 4
+};
+
+enum pin_action {
+    PA_NONE = 0,
+    PA_GPIO_OUT_SETUP,
+    PA_GPIO_OUT_RESET,
+    PA_GPIO_OUT_TOGGLE_NOIRQ,
+    PA_GPIO_OUT_TOGGLE,
+    PA_GPIO_OUT_WRITE,
+    PA_GPIO_IN_SETUP,
+    PA_GPIO_IN_RESET,
+    PA_GPIO_IN_READ,
+    PA_PWM_SETUP,
+    PA_PWM_WRITE,
+    PA_ADC_SETUP,
+    PA_ADC_SAMPLE,
+    PA_ADC_READ,
+    PA_ADC_CANCEL_SAMPLE
+};
+
+enum device_type {
+    DT_NONE = 0,
+    DT_STEPPER_X,
+    DT_STEPPER_Y,
+    DT_STEPPER_Z,
+    DT_EXTRUDER,
+    DT_FUN,
+    DT_BED,
+    DT_LED
+};
+
+struct gpio_line {
+//////    int chipid;
+//////    int offset;
+//////    int fd;
+    int state;
+    int num;
+    enum pin_mode pinMode;
+    enum pin_action pinAction;
+    enum device_type deviceType;
+};
+
+// gpio.c
+extern struct gpio_line gpio_lines[9 * MAX_GPIO_LINES];
 
 struct gpio_out {
     struct gpio_line* line;

@@ -15,7 +15,7 @@
 #include "gpio.h" // gpio_out_write
 #include "internal.h" // report_errno
 #include "sched.h" // sched_shutdown
-
+#include "debug.h"
 ////// #define GPIO_CONSUMER "klipper"
 
 DECL_ENUMERATION_RANGE("pin", "PA0", GPIO('A', 0), MAX_GPIO_LINES);
@@ -28,53 +28,55 @@ DECL_ENUMERATION_RANGE("pin", "PG0", GPIO('G', 0), MAX_GPIO_LINES);
 DECL_ENUMERATION_RANGE("pin", "PH0", GPIO('H', 0), MAX_GPIO_LINES);
 DECL_ENUMERATION_RANGE("pin", "PI0", GPIO('I', 0), MAX_GPIO_LINES);
 
-enum pin_mode {
-    PM_NONE = 0,
-    PM_BIN_IN = 1,
-    PM_BIN_OUT = 2,
-    PM_ANALOG_IN = 3,
-    PM_PWM_OUT = 4
-};
+//enum pin_mode {
+//    PM_NONE = 0,
+//    PM_BIN_IN = 1,
+//    PM_BIN_OUT = 2,
+//    PM_ANALOG_IN = 3,
+//    PM_PWM_OUT = 4
+//};
+//
+//enum pin_action {
+//    PA_NONE = 0,
+//    PA_GPIO_OUT_SETUP,
+//    PA_GPIO_OUT_RESET,
+//    PA_GPIO_OUT_TOGGLE_NOIRQ,
+//    PA_GPIO_OUT_TOGGLE,
+//    PA_GPIO_OUT_WRITE,
+//    PA_GPIO_IN_SETUP,
+//    PA_GPIO_IN_RESET,
+//    PA_GPIO_IN_READ,
+//    PA_PWM_SETUP,
+//    PA_PWM_WRITE,
+//    PA_ADC_SETUP,
+//    PA_ADC_SAMPLE,
+//    PA_ADC_READ,
+//    PA_ADC_CANCEL_SAMPLE
+//};
+//
+//enum device_type {
+//    DT_NONE = 0,
+//    DT_STEPPER_X,
+//    DT_STEPPER_Y,
+//    DT_STEPPER_Z,
+//    DT_EXTRUDER,
+//    DT_FUN,
+//    DT_BED,
+//    DT_LED
+//};
+//
+//struct gpio_line {
+////////    int chipid;
+////////    int offset;
+////////    int fd;
+//    int state;
+//    int num;
+//    enum pin_mode pinMode;
+//    enum pin_action pinAction;
+//    enum device_type deviceType;
+//};
 
-enum pin_action {
-    PA_NONE = 0,
-    PA_GPIO_OUT_SETUP,
-    PA_GPIO_OUT_RESET,
-    PA_GPIO_OUT_TOGGLE_NOIRQ,
-    PA_GPIO_OUT_TOGGLE,
-    PA_GPIO_OUT_WRITE,
-    PA_GPIO_IN_SETUP,
-    PA_GPIO_IN_RESET,
-    PA_GPIO_IN_READ,
-    PA_PWM_SETUP,
-    PA_PWM_WRITE,
-    PA_ADC_SETUP,
-    PA_ADC_SAMPLE,
-    PA_ADC_READ,
-    PA_ADC_CANCEL_SAMPLE
-};
-
-enum device_type {
-    DT_NONE = 0,
-    DT_STEPPER_X,
-    DT_STEPPER_Y,
-    DT_STEPPER_Z,
-    DT_EXTRUDER,
-    DT_FUN,
-    DT_BED,
-    DT_LED
-};
-
-struct gpio_line {
-//////    int chipid;
-//////    int offset;
-//////    int fd;
-    int state;
-    enum pin_mode pinMode;
-    enum pin_action pinAction;
-    enum device_type deviceType;
-};
-static struct gpio_line gpio_lines[9 * MAX_GPIO_LINES];
+struct gpio_line gpio_lines[9 * MAX_GPIO_LINES];
 ////// static int gpio_chip_fd[9] = { -1, -1, -1, -1, -1, -1, -1, -1, -1 };
 
 //////static int
@@ -112,6 +114,8 @@ gpio_out_setup(uint32_t pin, uint8_t val)
 //////    line->offset = GPIO2PIN(pin);
 //////    line->chipid = GPIO2PORT(pin);
 //////    struct gpio_out g = { .line = line };
+    debug_log_gpio_out_setup(pin, val);
+    gpio_lines[pin].num = pin;
     struct gpio_out g = { .line = &gpio_lines[pin] };
     gpio_out_reset(g,val);
     return g;
@@ -133,6 +137,7 @@ gpio_release_line(struct gpio_line *line)
 void
 gpio_out_reset(struct gpio_out g, uint8_t val)
 {
+    debug_log_gpio_out_reset(g, val);
     gpio_release_line(g.line);
     g.line->pinMode = PM_BIN_OUT;
     g.line->state = !!val;
@@ -158,6 +163,7 @@ gpio_out_reset(struct gpio_out g, uint8_t val)
 void
 gpio_out_write(struct gpio_out g, uint8_t val)
 {
+    debug_log_gpio_out_write(g, val);
     g.line->state = !!val;
 //////     struct gpiohandle_data data;
 //////     memset(&data, 0, sizeof(data));
@@ -169,12 +175,14 @@ gpio_out_write(struct gpio_out g, uint8_t val)
 void
 gpio_out_toggle_noirq(struct gpio_out g)
 {
-     gpio_out_write(g, !g.line->state);
+    debug_log_gpio_out_toggle_noirq(g);
+    gpio_out_write(g, !g.line->state);
 }
 
 void
 gpio_out_toggle(struct gpio_out g)
 {
+    debug_log_gpio_out_toggle(g);
     gpio_out_toggle_noirq(g);
 }
 
@@ -182,7 +190,11 @@ struct gpio_in
 gpio_in_setup(uint32_t pin, int8_t pull_up)
 {
     if (pin >= ARRAY_SIZE(gpio_lines)) shutdown("Not an input pin");
+    gpio_lines[pin].pinMode = PM_BIN_IN;
+    gpio_lines[pin].num = pin;
+    gpio_lines[pin].state = 1;
     struct gpio_in g = { .line = &gpio_lines[pin] };
+    debug_log_gpio_in_setup(pin, pull_up);
     gpio_in_reset(g, pull_up);
     return g;
 //////     if (pin >= ARRAY_SIZE(gpio_lines)) shutdown("Not an input pin");
@@ -198,7 +210,7 @@ void
 gpio_in_reset(struct gpio_in g, int8_t pull_up)
 {
     gpio_release_line(g.line);
-    g.line->pinMode = PM_BIN_IN;
+    debug_log_gpio_in_reset(g, pull_up);
 
 //////     struct gpiohandle_request req;
 //////     memset(&req, 0, sizeof(req));
@@ -226,6 +238,8 @@ gpio_in_reset(struct gpio_in g, int8_t pull_up)
 uint8_t
 gpio_in_read(struct gpio_in g)
 {
+    g.line->state = gpio_lines[9].state;
+    //debug_log_gpio_in_read(g);
     return g.line->state;
 //////     struct gpiohandle_data data;
 //////     memset(&data, 0, sizeof(data));
