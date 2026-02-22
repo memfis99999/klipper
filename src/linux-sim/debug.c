@@ -146,6 +146,9 @@ void debug_log_gpio_in_reset(struct gpio_in g, int8_t pull_up)
 
 void debug_log_gpio_in_read(struct gpio_in g)
 {
+    static int skip;
+    if(skip++ < 1000) return;
+    skip = 0;
     char text[96];
     int state = g.line->state;
     int num = g.line->num;
@@ -155,6 +158,34 @@ void debug_log_gpio_in_read(struct gpio_in g)
 
     int n = snprintf(text, sizeof(text),
         "%012lluus gpio_in_read(pin = %u(%s)) = %u)\n",
+        (unsigned long long)now_us(), num, pin_to_text(num), state);
+    log_write(text, n);
+}
+
+void debug_log_gpio_adc_setup(uint32_t pin)
+{
+    char text[96];
+    int n = snprintf(text, sizeof(text),
+        "%012lluus gpio_adc_setup(pin = %u(%s)\n",
+        (unsigned long long)now_us(), pin, pin_to_text(pin));
+    log_write(text, n);
+}
+
+void debug_log_gpio_adc_read(struct gpio_adc g)
+{
+    static int skip;
+    if(skip++ < 1000) return;
+    skip = 0;
+    char text[96];
+//
+    int num = g.fd;
+    int state = gpio_lines[num].state;
+//    int pm = gpio_lines[num].pinMode;
+//    int pa = gpio_lines[num].pinAction;
+//    int dt = gpio_lines[num].deviceType;
+//
+    int n = snprintf(text, sizeof(text),
+        "%012lluus gpio_adc_read(pin = %u(%s)) = %u)\n",
         (unsigned long long)now_us(), num, pin_to_text(num), state);
     log_write(text, n);
 }

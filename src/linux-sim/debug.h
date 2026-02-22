@@ -16,9 +16,9 @@ void debug_log_gpio_in_reset(struct gpio_in g, int8_t pull_up);
 void debug_log_gpio_in_read(struct gpio_in g);
 
 void debug_log_gpio_adc_setup(uint32_t pin);
-void debug_log_gpio_adc_sample(struct gpio_adc g);
+// void debug_log_gpio_adc_sample(struct gpio_adc g);
 void debug_log_gpio_adc_read(struct gpio_adc g);
-void debug_log_gpio_adc_cancel_sample(struct gpio_adc g);
+// void debug_log_gpio_adc_cancel_sample(struct gpio_adc g);
 
 //////
 ////// struct spi_config {

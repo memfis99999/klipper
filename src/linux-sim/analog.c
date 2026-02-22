@@ -14,17 +14,29 @@
 #include "sched.h" // sched_shutdown
 #include "debug.h"
 
-DECL_CONSTANT("ADC_MAX", 4095); // Assume 12bit adc
+#define ADC_MAX 4095
+DECL_CONSTANT("ADC_MAX", ADC_MAX); // Assume 12bit adc
 
-#define ANALOG_START (1<<12)
-
-DECL_ENUMERATION_RANGE("pin", "analog0", ANALOG_START, 8);
-
-#define IIO_PATH "/sys/bus/iio/devices/iio:device0/in_voltage%d_raw"
+////// #define ANALOG_START (1<<12)
+//////
+////// DECL_ENUMERATION_RANGE("pin", "analog0", ANALOG_START, 8);
+//////
+////// #define IIO_PATH "/sys/bus/iio/devices/iio:device0/in_voltage%d_raw"
 
 struct gpio_adc
 gpio_adc_setup(uint32_t pin)
 {
+    debug_log_gpio_adc_setup(pin);
+    if (pin >= ARRAY_SIZE(gpio_lines)) shutdown("Not an input pin");
+    gpio_lines[pin].pinMode = PM_ANALOG_IN;
+    gpio_lines[pin].num = pin;
+    gpio_lines[pin].state = 4 * pin * pin;
+    if (pin == 23) gpio_lines[pin].state = 10;
+    if (pin == 21) gpio_lines[pin].state = 4085;
+
+///    struct gpio_adc g = { .line = &gpio_lines[pin] };
+///    debug_log_gpio_adc_setup(pin);
+///    return g;
 //////    char fname[256];
 //////    snprintf(fname, sizeof(fname), IIO_PATH, pin-ANALOG_START);
 //////
@@ -36,7 +48,7 @@ gpio_adc_setup(uint32_t pin)
 //////    int ret = set_non_blocking(fd);
 //////    if (ret < 0)
 //////        goto fail;
-//////    return (struct gpio_adc){ .fd = fd };
+    return (struct gpio_adc){ .fd = pin };
 //////fail:
 //////    if (fd >= 0)
 //////        close(fd);
@@ -52,15 +64,19 @@ gpio_adc_sample(struct gpio_adc g)
 uint16_t
 gpio_adc_read(struct gpio_adc g)
 {
-    char buf[64];
-    int ret = pread(g.fd, buf, sizeof(buf)-1, 0);
-    if (ret <= 0) {
-        report_errno("analog read", ret);
-        try_shutdown("Error on analog read");
-        return 0;
-    }
-    buf[ret] = '\0';
-    return atoi(buf);
+///    g.line->state = 1000;//gpio_lines[9].state;
+debug_log_gpio_adc_read(g);
+///    return (uint16_t)(g.line->state);
+//////     char buf[64];
+//////     int ret = pread(g.fd, buf, sizeof(buf)-1, 0);
+//////     if (ret <= 0) {
+//////         report_errno("analog read", ret);
+//////         try_shutdown("Error on analog read");
+//////         return 0;
+//////     }
+//////     buf[ret] = '\0';
+//////     return atoi(buf);
+            return gpio_lines[g.fd].state;
 }
 
 void
