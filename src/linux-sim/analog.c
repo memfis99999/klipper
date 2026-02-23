@@ -30,7 +30,7 @@ gpio_adc_setup(uint32_t pin)
     if (pin >= ARRAY_SIZE(gpio_lines)) shutdown("Not an input pin");
     gpio_lines[pin].pinMode = PM_ANALOG_IN;
     gpio_lines[pin].num = pin;
-    gpio_lines[pin].state = 4 * pin * pin;
+    gpio_lines[pin].state = 220;
     if (pin == 23) gpio_lines[pin].state = 10;
     if (pin == 21) gpio_lines[pin].state = 4085;
 

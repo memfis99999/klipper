@@ -69,9 +69,10 @@ main(int argc, char **argv)
 {
     // Parse program args
     orig_argv = argv;
-    int opt, watchdog = 0, realtime = 0;
+    int opt, watchdog = 0, realtime = 0, debug_log = 0;
     char *serial = "/tmp/klipper_host_mcu";
-    while ((opt = getopt(argc, argv, "wrI:")) != -1) {
+    char *config = "/home/klippy/printer_data/config/printer.cfg";
+    while ((opt = getopt(argc, argv, "wrdI:C:")) != -1) {
         switch (opt) {
         case 'w':
             watchdog = 1;
@@ -79,11 +80,18 @@ main(int argc, char **argv)
         case 'r':
             realtime = 1;
             break;
+        case 'd':
+            debug_log = 1;
+            break;
         case 'I':
             serial = optarg;
             break;
+        case 'C':
+            config = optarg;
+            break;
         default:
-            fprintf(stderr, "Usage: %s [-w] [-r] [-I path]\n", argv[0]);
+            fprintf(stderr,
+                "Usage: %s [-w] [-r] [-d] [-I path] [-C path]", argv[0]);
             return -1;
         }
     }
@@ -103,7 +111,12 @@ main(int argc, char **argv)
             return ret;
     }
 
-    debug_log_open("/tmp/debug_gpio.log");
+    if (debug_log) {
+        int ret = debug_log_open("/tmp/debug_gpio.log");;
+        if (ret)
+            return ret;
+    }
+
     // Main loop
     sched_main();
     debug_log_close();
