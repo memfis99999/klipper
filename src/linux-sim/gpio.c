@@ -163,7 +163,7 @@ gpio_out_reset(struct gpio_out g, uint8_t val)
 void
 gpio_out_write(struct gpio_out g, uint8_t val)
 {
-    debug_log_gpio_out_write(g, val);
+    /// debug_log_gpio_out_write(g, val);
     g.line->state = !!val;
 //////     struct gpiohandle_data data;
 //////     memset(&data, 0, sizeof(data));
@@ -175,14 +175,14 @@ gpio_out_write(struct gpio_out g, uint8_t val)
 void
 gpio_out_toggle_noirq(struct gpio_out g)
 {
-    debug_log_gpio_out_toggle_noirq(g);
+    /// debug_log_gpio_out_toggle_noirq(g);
     gpio_out_write(g, !g.line->state);
 }
 
 void
 gpio_out_toggle(struct gpio_out g)
 {
-    debug_log_gpio_out_toggle(g);
+    /// debug_log_gpio_out_toggle(g);
     gpio_out_toggle_noirq(g);
 }
 
@@ -194,7 +194,7 @@ gpio_in_setup(uint32_t pin, int8_t pull_up)
     gpio_lines[pin].num = pin;
     gpio_lines[pin].state = 1;
     struct gpio_in g = { .line = &gpio_lines[pin] };
-    debug_log_gpio_in_setup(pin, pull_up);
+    /// debug_log_gpio_in_setup(pin, pull_up);
     gpio_in_reset(g, pull_up);
     return g;
 //////     if (pin >= ARRAY_SIZE(gpio_lines)) shutdown("Not an input pin");

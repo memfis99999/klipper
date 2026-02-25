@@ -65,7 +65,7 @@ uint16_t
 gpio_adc_read(struct gpio_adc g)
 {
 ///    g.line->state = 1000;//gpio_lines[9].state;
-debug_log_gpio_adc_read(g);
+///    debug_log_gpio_adc_read(g);
 ///    return (uint16_t)(g.line->state);
 //////     char buf[64];
 //////     int ret = pread(g.fd, buf, sizeof(buf)-1, 0);
