@@ -47,7 +47,6 @@ CPPFLAGS = -I$(OUT) -P -MD -MT $@
 
 # Default targets
 target-y := $(OUT)klipper.elf
-target-y += $(OUT)hostCrc16.elf
 
 all:
 
