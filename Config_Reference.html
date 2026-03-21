@@ -6142,9 +6142,16 @@ sensor_type: ldc1612
 #samples_tolerance:
 #samples_tolerance_retries:
 #   See the &quot;probe&quot; section for information on these parameters.
-#tap_threshold: 0
-#   Noise cutoff/stop trigger threshold delta Hz per sample
-#   See the Eddy_Probe.md for explanation
+#tap_threshold:
+#   Noise cutoff/stop trigger threshold (in Hz). Specify this value to
+#   enable support for &quot;METHOD=tap&quot; probe commands. See Eddy_Probe.md
+#   for more information. Larger values make the tap detection less
+#   sensitive. That is, larger values make it less likely the toolhead
+#   will incorrectly stop early due to noise, while increasing the
+#   risk of the toolhead not correctly stopping when it first contacts
+#   the bed. If this value is specified then one may override its
+#   value at run-time using the &quot;TAP_THRESHOLD&quot; parameter on probe
+#   commands. The default is to not enable support for &quot;tap&quot; probing.
 </code></pre></div>
 
 <h3 id="axis_twist_compensation">[axis_twist_compensation]<a class="headerlink" href="#axis_twist_compensation" title="Permanent link">&para;</a></h3>
@@ -7847,6 +7854,7 @@ run_current:
 #driver_SEDN: 0
 #driver_SEIMIN: 0
 #driver_SFILT: 0
+#driver_SG4_THRS: 0
 #driver_SG4_ANGLE_OFFSET: 1
 #driver_SLOPE_CONTROL: 0
 #   Set the given register during the configuration of the TMC2240
@@ -7860,8 +7868,8 @@ run_current:
 #   is &quot;active low&quot; and is thus normally prefaced with &quot;^!&quot;. Setting
 #   this creates a &quot;tmc2240_stepper_x:virtual_endstop&quot; virtual pin
 #   which may be used as the stepper&#39;s endstop_pin. Doing this enables
-#   &quot;sensorless homing&quot;. (Be sure to also set driver_SGT to an
-#   appropriate sensitivity value.) The default is to not enable
+#   &quot;sensorless homing&quot;. (Be sure to also set driver_SGT OR driver_SG4_THRS
+#   to an appropriate sensitivity value.) The default is to not enable
 #   sensorless homing.
 </code></pre></div>
 
