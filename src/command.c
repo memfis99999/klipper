@@ -154,20 +154,23 @@ error:
 
 // Encode a message
 static uint_fast8_t
-command_encodef(uint8_t *buf, const struct command_encoder *ce, va_list args)
+command_encodef(uint8_t *buf, uint_fast8_t buf_size
+                , const struct command_encoder *ce, va_list args)
 {
     uint_fast8_t max_size = READP(ce->max_size);
     if (max_size <= MESSAGE_MIN)
         // Ack/Nak message
         return max_size;
+    if (buf_size < max_size)
+        max_size = buf_size;
     uint8_t *p = &buf[MESSAGE_HEADER_SIZE];
     uint8_t *maxend = &p[max_size - MESSAGE_MIN];
     uint_fast8_t num_params = READP(ce->num_params);
     const uint8_t *param_types = READP(ce->param_types);
     p = encode_msgid(p, READP(ce->encoded_msgid));
     while (num_params--) {
-        if (p > maxend)
-            goto error;
+        if (p + 2 > maxend)
+            goto need_space;
         uint_fast8_t t = READP(*param_types);
         param_types++;
         uint32_t v;
@@ -188,7 +191,7 @@ command_encodef(uint8_t *buf, const struct command_encoder *ce, va_list args)
             break;
         case PT_string: {
             uint8_t *s = va_arg(args, uint8_t*), *lenp = p++;
-            while (*s && p<maxend)
+            while (*s && p<=maxend)
                 *p++ = *s++;
             *lenp = p-lenp-1;
             break;
@@ -196,8 +199,8 @@ command_encodef(uint8_t *buf, const struct command_encoder *ce, va_list args)
         case PT_progmem_buffer:
         case PT_buffer: {
             v = va_arg(args, int);
-            if (v > maxend-p)
-                v = maxend-p;
+            if (v >= maxend-p)
+                goto need_space;
             *p++ = v;
             uint8_t *s = va_arg(args, uint8_t*);
             if (t == PT_progmem_buffer)
@@ -211,7 +214,11 @@ command_encodef(uint8_t *buf, const struct command_encoder *ce, va_list args)
             goto error;
         }
     }
+    if (p > maxend)
+        goto need_space;
     return p - buf + MESSAGE_TRAILER_SIZE;
+need_space:
+    return 0;
 error:
     shutdown("Message encode error");
 }
@@ -230,11 +237,12 @@ command_add_frame(uint8_t *buf, uint_fast8_t msglen)
 
 // Encode a message and then add a message block frame around it
 uint_fast8_t
-command_encode_and_frame(uint8_t *buf, const struct command_encoder *ce
-                         , va_list args)
+command_encode_and_frame(uint8_t *buf, uint_fast8_t buf_size
+                         , const struct command_encoder *ce, va_list args)
 {
-    uint_fast8_t msglen = command_encodef(buf, ce, args);
-    command_add_frame(buf, msglen);
+    uint_fast8_t msglen = command_encodef(buf, buf_size, ce, args);
+    if (msglen)
+        command_add_frame(buf, msglen);
     return msglen;
 }
 

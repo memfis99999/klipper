@@ -8,6 +8,36 @@ All dates in this document are approximate.
 
 ## Changes
 
+20260525: The internal implementation of "probe:z_virtual_endstop" has
+changed. Most users will not observe a change in behavior. Previously
+it was technically possible to mix "probe:z_virtual_endstop" with
+other types of Z endstops and this behavior is no longer valid.
+
+20260501: The handling of the `[probe_eddy_current]` `tap_threshold`
+config option and associated `TAP_THRESHOLD` G-Code parameter has
+changed. It will be necessary to recalibrate the value. See the
+[eddy probe documentation](Eddy_Probe.md) for calibration directions.
+
+20260408: The script `lib/canboot/flash_can.py` has been updated to
+the most current version from
+[Katapult](https://github.com/Arksine/katapult) and as such renamed to
+`lib/katapult/flashtool.py`.  If you call this script directly instead
+of using the existing Makefiles, you will need to change the path to
+the script to `lib/katapult/flashtool.py`.
+
+20260318: The `[probe_eddy_current]` config options `speed`,
+`lift_speed`, `samples`, `sample_retract_dist`, `samples_result`,
+`samples_tolerance`, and `samples_tolerance_retries` no longer apply
+to probe commands using `METHOD=scan`, `METHOD=rapid_scan`, nor
+`METHOD=tap`. To use different settings, supply the equivalent
+`PROBE_SPEED`, `LIFT_SPEED`, `SAMPLES`, `SAMPLE_RETRACT_DIST`,
+`SAMPLES_RESULT`, `SAMPLES_TOLERANCE`, or `SAMPLES_TOLERANCE_RETRIES`
+parameter with the probe command.
+
+20260318: The `[probe_eddy_current]` config option `z_offset` has been
+renamed to `descend_z`. Using the old name is deprecated and it will
+be removed in the near future.
+
 20260214: The `MANUAL_STEPPER` G-Code command `STOP_ON_ENDSTOP`
 parameter has changed. See the
 [MANUAL_STEPPER](G-Codes.md#manual_stepper) documentation for
