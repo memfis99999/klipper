@@ -8,3 +8,4 @@ output
 fw
 *.log
 ci_build
+.obj-k1c

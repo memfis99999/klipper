@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Fetch matching firmware for current Klipper commit
 set -e
 
