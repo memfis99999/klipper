@@ -1,10 +1,10 @@
 ----------------------------------------
-[2026-07-26 15:36:14] 🛠️ Build firmware (Creality_K1)
-[2026-07-26 15:36:14] 🛠️ Version: v0.13.0-720-g67b530fb
-[2026-07-26 15:36:14] 🛠️ Repo: https://github.com/memfis99999/klipper
-[2026-07-26 15:36:14] 🛠️ Branch: master
-[2026-07-26 15:36:14] 🛠️ CONFIGS_DIR: /home/runner/work/klipper/klipper/src/configs/Creality
-[2026-07-26 15:36:14] Found config: K1_bed0_100_G21_defconfig
+[2026-07-26 15:40:42] 🛠️ Build firmware (Creality_K1)
+[2026-07-26 15:40:42] 🛠️ Version: v0.13.0-720-g67b530fb
+[2026-07-26 15:40:42] 🛠️ Repo: https://github.com/memfis99999/klipper
+[2026-07-26 15:40:42] 🛠️ Branch: master
+[2026-07-26 15:40:42] 🛠️ CONFIGS_DIR: /home/runner/work/klipper/klipper/src/configs/Creality
+[2026-07-26 15:40:42] Found config: K1_bed0_100_G21_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -55,11 +55,11 @@ Version: v0.13.0-720-g67b530fb
   Creating bin file out/klipper.bin
   Compiling and Linking out/hostCrc16.elf
   Adding CRC
-  CRC16 is 0x5a95
-  Length is 0x9880
+  CRC16 is 0xb71a
+  Length is 0x9884
   Renaming binary
 'out/klipper.bin' -> 'out/bed0_100_G21-bed0_013_720.bin'
-[2026-07-26 15:36:19] Found config: K1_bed0_110_G21_defconfig
+[2026-07-26 15:40:46] Found config: K1_bed0_110_G21_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -110,11 +110,11 @@ Version: v0.13.0-720-g67b530fb
   Creating bin file out/klipper.bin
   Compiling and Linking out/hostCrc16.elf
   Adding CRC
-  CRC16 is 0x2e
+  CRC16 is 0xcef9
   Length is 0x9880
   Renaming binary
 'out/klipper.bin' -> 'out/bed0_110_G21-bed0_013_720.bin'
-[2026-07-26 15:36:23] Found config: K1_mcu0_110_G32_defconfig
+[2026-07-26 15:40:49] Found config: K1_mcu0_110_G32_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -165,11 +165,11 @@ Version: v0.13.0-720-g67b530fb
   Creating bin file out/klipper.bin
   Compiling and Linking out/hostCrc16.elf
   Adding CRC
-  CRC16 is 0xc7bf
-  Length is 0x862c
+  CRC16 is 0x3b79
+  Length is 0x8630
   Renaming binary
 'out/klipper.bin' -> 'out/mcu0_110_G32-mcu0_013_720.bin'
-[2026-07-26 15:36:27] Found config: K1_mcu0_110_S40_defconfig
+[2026-07-26 15:40:53] Found config: K1_mcu0_110_S40_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -234,11 +234,11 @@ Version: v0.13.0-720-g67b530fb
   Creating bin file out/klipper.bin
   Compiling and Linking out/hostCrc16.elf
   Adding CRC
-  CRC16 is 0x862c
+  CRC16 is 0x66e6
   Length is 0xa510
   Renaming binary
 'out/klipper.bin' -> 'out/mcu0_110_S40-mcu0_013_720.bin'
-[2026-07-26 15:36:33] Found config: K1_mcu0_120_G32_defconfig
+[2026-07-26 15:40:58] Found config: K1_mcu0_120_G32_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -289,11 +289,11 @@ Version: v0.13.0-720-g67b530fb
   Creating bin file out/klipper.bin
   Compiling and Linking out/hostCrc16.elf
   Adding CRC
-  CRC16 is 0x4df6
-  Length is 0x862c
+  CRC16 is 0x5d5d
+  Length is 0x8630
   Renaming binary
 'out/klipper.bin' -> 'out/mcu0_120_G32-mcu0_013_720.bin'
-[2026-07-26 15:36:37] Found config: K1_noz0_110_G30_defconfig
+[2026-07-26 15:41:01] Found config: K1_noz0_110_G30_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -344,11 +344,11 @@ Version: v0.13.0-720-g67b530fb
   Creating bin file out/klipper.bin
   Compiling and Linking out/hostCrc16.elf
   Adding CRC
-  CRC16 is 0xb6db
+  CRC16 is 0xad41
   Length is 0x8640
   Renaming binary
 'out/klipper.bin' -> 'out/noz0_110_G30-noz0_013_720.bin'
-[2026-07-26 15:36:42] Found config: K1_noz0_110_S06_defconfig
+[2026-07-26 15:41:05] Found config: K1_noz0_110_S06_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -411,11 +411,11 @@ Version: v0.13.0-720-g67b530fb
   Creating bin file out/klipper.bin
   Compiling and Linking out/hostCrc16.elf
   Adding CRC
-  CRC16 is 0xa980
+  CRC16 is 0xa6b4
   Length is 0xa674
   Renaming binary
 'out/klipper.bin' -> 'out/noz0_110_S06-noz0_013_720.bin'
-[2026-07-26 15:36:47] Found config: K1_noz0_120_G30_defconfig
+[2026-07-26 15:41:10] Found config: K1_noz0_120_G30_defconfig
   Creating symbolic link out/board
   Building out/autoconf.h
   Compiling out/src/sched.o
@@ -466,10 +466,10 @@ Version: v0.13.0-720-g67b530fb
   Creating bin file out/klipper.bin
   Compiling and Linking out/hostCrc16.elf
   Adding CRC
-  CRC16 is 0xb65d
+  CRC16 is 0xcf64
   Length is 0x8640
   Renaming binary
 'out/klipper.bin' -> 'out/noz0_120_G30-noz0_013_720.bin'
-[2026-07-26 15:36:51] 🛠️ Build completed successfully.
-Build took 37 seconds.
+[2026-07-26 15:41:13] 🛠️ Build completed successfully.
+Build took 31 seconds.
 ----------------------------------------
