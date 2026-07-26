@@ -1,6 +1,6 @@
-[2026-07-12 12:10:44]
+[2026-07-26 15:29:21]
 🛠️ Build completed successfully.
-🛠️ Firmware version: v0.13.0-717-g8d94a539
+🛠️ Firmware version: v0.13.0-719-g574d89a9
 🛠️ Repository: https://github.com/memfis99999/klipper
 🛠️ Branch: master
 🛠️ Toolchain: arm-none-eabi-gcc (15:10.3-2021.07-4) 10.3.1 20210621 (release)
@@ -9,5 +9,5 @@
 
 git clone --branch master https://github.com/memfis99999/klipper.git klipper && \
 cd klipper && \
-git checkout 8d94a539 && \
+git checkout 574d89a9 && \
 ./scripts/get-fw.sh
