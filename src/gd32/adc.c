@@ -14,7 +14,9 @@ DECL_ENUMERATION("pin", "ADC_TEMPERATURE", ADC_TEMPERATURE_PIN);
 static const uint8_t adc_pin[] = {
     GPIO('A',0),GPIO('A',1),GPIO('A',2),GPIO('A',3),
     GPIO('A',4),GPIO('A',5),GPIO('A',6),GPIO('A',7),
-    0xff,GPIO('B',1)};
+    0xff, GPIO('B',1), 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff,
+    ADC_TEMPERATURE_PIN};
 
 #define _ADC_STAT   ADC_STAT
 #define _ADC_CTL0   ADC_CTL0
@@ -213,7 +215,7 @@ struct gpio_adc gpio_adc_setup(uint8_t pin)
 
     if(pin == ADC_TEMPERATURE_PIN)
     {
-        _ADC_CTL1 = ((uint32_t)ADC_CTL1_TSVREN);  //mcu temp
+        _ADC_CTL1 |= ((uint32_t)ADC_CTL1_TSVREN);  //mcu temp
     }
     else
     {
@@ -223,7 +225,7 @@ struct gpio_adc gpio_adc_setup(uint8_t pin)
 #elif CONFIG_MACH_GD32F303XX
     if(pin == ADC_TEMPERATURE_PIN)
     {
-        _ADC_CTL1 = ((uint32_t)ADC_CTL1_TSVREN);  //mcu temp
+        _ADC_CTL1 |= ((uint32_t)ADC_CTL1_TSVREN);  //mcu temp
     }
     else
     {
@@ -278,7 +280,11 @@ gpio_adc_sample(struct gpio_adc g)
         goto delaytime;
     }
 
-    adcRegularChannelConfig(0, g.chan, ADC_SAMPLETIME_7POINT5);
+    uint32_t sample_time = g.chan == 16
+        ? ADC_SAMPLETIME_239POINT5
+        : ADC_SAMPLETIME_7POINT5;
+
+    adcRegularChannelConfig(0, g.chan, sample_time);
 
     _ADC_CTL1 |= ADC_CTL1_SWRCST; //software trigger enable
 
